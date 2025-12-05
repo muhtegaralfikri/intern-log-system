@@ -1,0 +1,221 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  INTERN
+  SUPERVISOR
+  ADMIN
+}
+
+enum AttendanceStatus {
+  PRESENT
+  ABSENT
+  LATE
+  LEAVE
+}
+
+enum MoodLevel {
+  VERY_BAD
+  BAD
+  NEUTRAL
+  GOOD
+  VERY_GOOD
+}
+
+model User {
+  id               String       @id @default(uuid())
+  email            String       @unique
+  password         String
+  name             String
+  role             Role         @default(INTERN)
+  department       String?
+  avatarUrl        String?
+  supervisorId     String?
+  supervisor       User?        @relation("SupervisorInterns", fields: [supervisorId], references: [id])
+  interns          User[]       @relation("SupervisorInterns")
+  activities       Activity[]
+  attendances      Attendance[]
+  reports          Report[]
+  badges           UserBadge[]
+  skills           UserSkill[]
+  moods            MoodEntry[]
+  feedbackGiven    Feedback[]   @relation("FeedbackGiver")
+  feedbackReceived Feedback[]   @relation("FeedbackReceiver")
+  createdAt        DateTime     @default(now())
+  updatedAt        DateTime     @updatedAt
+}
+
+model Activity {
+  id          String          @id @default(uuid())
+  userId      String
+  user        User            @relation(fields: [userId], references: [id])
+  title       String
+  description String
+  category    String
+  duration    Int
+  date        DateTime
+  skills      ActivitySkill[]
+  attachments Attachment[]
+  feedback    Feedback[]
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+}
+
+model Attendance {
+  id              String           @id @default(uuid())
+  userId          String
+  user            User             @relation(fields: [userId], references: [id])
+  date            DateTime
+  checkIn         DateTime?
+  checkOut        DateTime?
+  checkInPhoto    String?
+  checkOutPhoto   String?
+  checkInLat      Float?
+  checkInLng      Float?
+  checkOutLat     Float?
+  checkOutLng     Float?
+  checkInAddress  String?
+  checkOutAddress String?
+  isInRadius      Boolean          @default(false)
+  status          AttendanceStatus @default(PRESENT)
+  notes           String?
+  createdAt       DateTime         @default(now())
+}
+
+model Report {
+  id          String    @id @default(uuid())
+  userId      String
+  user        User      @relation(fields: [userId], references: [id])
+  title       String
+  content     String
+  aiSummary   String?
+  periodStart DateTime
+  periodEnd   DateTime
+  type        String
+  isApproved  Boolean   @default(false)
+  approvedAt  DateTime?
+  approvedBy  String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model Skill {
+  id         String          @id @default(uuid())
+  name       String          @unique
+  category   String
+  activities ActivitySkill[]
+  userSkills UserSkill[]
+  createdAt  DateTime        @default(now())
+}
+
+model ActivitySkill {
+  id         String   @id @default(uuid())
+  activityId String
+  activity   Activity @relation(fields: [activityId], references: [id])
+  skillId    String
+  skill      Skill    @relation(fields: [skillId], references: [id])
+  createdAt  DateTime @default(now())
+
+  @@unique([activityId, skillId])
+}
+
+model UserSkill {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  skillId   String
+  skill     Skill    @relation(fields: [skillId], references: [id])
+  level     Int      @default(0)
+  hours     Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([userId, skillId])
+}
+
+model Badge {
+  id          String      @id @default(uuid())
+  name        String      @unique
+  description String
+  icon        String
+  condition   String
+  userBadges  UserBadge[]
+  createdAt   DateTime    @default(now())
+}
+
+model UserBadge {
+  id       String   @id @default(uuid())
+  userId   String
+  user     User     @relation(fields: [userId], references: [id])
+  badgeId  String
+  badge    Badge    @relation(fields: [badgeId], references: [id])
+  earnedAt DateTime @default(now())
+
+  @@unique([userId, badgeId])
+}
+
+model MoodEntry {
+  id        String    @id @default(uuid())
+  userId    String
+  user      User      @relation(fields: [userId], references: [id])
+  date      DateTime
+  mood      MoodLevel
+  energy    Int
+  notes     String?
+  createdAt DateTime  @default(now())
+
+  @@unique([userId, date])
+}
+
+model Attachment {
+  id         String   @id @default(uuid())
+  activityId String
+  activity   Activity @relation(fields: [activityId], references: [id])
+  fileName   String
+  fileUrl    String
+  fileType   String
+  fileSize   Int
+  createdAt  DateTime @default(now())
+}
+
+model Feedback {
+  id         String   @id @default(uuid())
+  activityId String
+  activity   Activity @relation(fields: [activityId], references: [id])
+  giverId    String
+  giver      User     @relation("FeedbackGiver", fields: [giverId], references: [id])
+  receiverId String
+  receiver   User     @relation("FeedbackReceiver", fields: [receiverId], references: [id])
+  rating     Int?
+  comment    String
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
+model ReportTemplate {
+  id        String   @id @default(uuid())
+  name      String
+  type      String
+  content   String
+  isDefault Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model OfficeLocation {
+  id        String   @id @default(uuid())
+  name      String
+  address   String
+  latitude  Float
+  longitude Float
+  radius    Int      @default(100)
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
