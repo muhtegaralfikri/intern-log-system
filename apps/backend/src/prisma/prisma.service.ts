@@ -6,7 +6,10 @@ import * as path from 'path';
 dotenv.config({ path: path.resolve(__dirname, '../../.env') });
 
 @Injectable()
-export class PrismaService extends PrismaClient implements OnModuleInit, OnModuleDestroy {
+export class PrismaService
+  extends PrismaClient
+  implements OnModuleInit, OnModuleDestroy
+{
   async onModuleInit() {
     await this.$connect();
   }

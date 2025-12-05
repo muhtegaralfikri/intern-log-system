@@ -1,4 +1,8 @@
-import { Injectable, BadRequestException, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  BadRequestException,
+  NotFoundException,
+} from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service';
 import { CheckInDto, CheckOutDto } from './dto/check-in.dto';
 
@@ -94,7 +98,9 @@ export class AttendanceService {
         checkOutLat: dto.latitude,
         checkOutLng: dto.longitude,
         checkOutAddress: dto.address,
-        notes: dto.notes ? `${attendance.notes || ''}\n${dto.notes}` : attendance.notes,
+        notes: dto.notes
+          ? `${attendance.notes || ''}\n${dto.notes}`
+          : attendance.notes,
       },
     });
   }
@@ -164,7 +170,8 @@ export class AttendanceService {
 
     attendances.forEach((a) => {
       if (a.checkIn && a.checkOut) {
-        const hours = (a.checkOut.getTime() - a.checkIn.getTime()) / (1000 * 60 * 60);
+        const hours =
+          (a.checkOut.getTime() - a.checkIn.getTime()) / (1000 * 60 * 60);
         summary.totalWorkHours += hours;
       }
     });

@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { Header } from '@/components/layout/Header';
 import { Card, Button } from '@/components/ui';
 import { api, aiApi } from '@/lib/api';
+import jsPDF from 'jspdf';
 
 interface Report {
   id: string;
@@ -21,7 +22,68 @@ export default function ReportsPage() {
   const [reports, setReports] = useState<Report[]>([]);
   const [loading, setLoading] = useState(true);
   const [generating, setGenerating] = useState(false);
+  const [downloading, setDownloading] = useState(false);
   const [selectedReport, setSelectedReport] = useState<Report | null>(null);
+
+  const downloadPDF = () => {
+    if (!selectedReport) return;
+    
+    setDownloading(true);
+    try {
+      const pdf = new jsPDF('p', 'mm', 'a4');
+      const pageWidth = pdf.internal.pageSize.getWidth();
+      const margin = 20;
+      const maxWidth = pageWidth - margin * 2;
+      let yPos = 20;
+
+      // Title
+      pdf.setFontSize(16);
+      pdf.setFont('helvetica', 'bold');
+      pdf.text(selectedReport.title, margin, yPos);
+      yPos += 10;
+
+      // Period
+      pdf.setFontSize(10);
+      pdf.setFont('helvetica', 'normal');
+      pdf.text(`Periode: ${formatDate(selectedReport.periodStart)} - ${formatDate(selectedReport.periodEnd)}`, margin, yPos);
+      yPos += 5;
+      pdf.text(`Dibuat: ${formatDate(selectedReport.createdAt)}`, margin, yPos);
+      yPos += 10;
+
+      // Line
+      pdf.setDrawColor(200);
+      pdf.line(margin, yPos, pageWidth - margin, yPos);
+      yPos += 10;
+
+      // Content
+      pdf.setFontSize(11);
+      const lines = pdf.splitTextToSize(selectedReport.content, maxWidth);
+      
+      for (const line of lines) {
+        if (yPos > 270) {
+          pdf.addPage();
+          yPos = 20;
+        }
+        pdf.text(line, margin, yPos);
+        yPos += 6;
+      }
+
+      // Footer
+      const pageCount = pdf.getNumberOfPages();
+      for (let i = 1; i <= pageCount; i++) {
+        pdf.setPage(i);
+        pdf.setFontSize(8);
+        pdf.setTextColor(150);
+        pdf.text(`Halaman ${i} dari ${pageCount}`, pageWidth / 2, 290, { align: 'center' });
+      }
+
+      pdf.save(`${selectedReport.title.replace(/\s+/g, '_')}.pdf`);
+    } catch (error) {
+      console.error('Failed to download PDF:', error);
+    } finally {
+      setDownloading(false);
+    }
+  };
 
   const fetchReports = async () => {
     try {
@@ -157,32 +219,36 @@ export default function ReportsPage() {
 
         <div>
           <Card>
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">Detail Laporan</h3>
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-lg font-semibold text-gray-900">Detail Laporan</h3>
+              {selectedReport && (
+                <Button size="sm" variant="outline" onClick={downloadPDF} isLoading={downloading}>
+                  <svg className="w-4 h-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                  </svg>
+                  PDF
+                </Button>
+              )}
+            </div>
             {selectedReport ? (
               <div className="space-y-4">
-                <div>
-                  <h4 className="font-medium text-gray-900">{selectedReport.title}</h4>
-                  <p className="text-sm text-gray-500 mt-1">
-                    {formatDate(selectedReport.periodStart)} - {formatDate(selectedReport.periodEnd)}
-                  </p>
-                </div>
-
-                <div>
-                  <p className="text-sm font-medium text-gray-700 mb-1">Konten:</p>
-                  <p className="text-sm text-gray-600 whitespace-pre-wrap">{selectedReport.content}</p>
-                </div>
-
-                {selectedReport.aiSummary && (
-                  <div className="p-3 bg-blue-50 rounded-lg">
-                    <p className="text-sm font-medium text-blue-700 mb-1 flex items-center gap-1">
-                      <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                      </svg>
-                      AI Summary
+                <div className="bg-white p-4 rounded-lg">
+                  <div className="border-b pb-3 mb-4">
+                    <h4 className="text-lg font-bold text-gray-900">{selectedReport.title}</h4>
+                    <p className="text-sm text-gray-500 mt-1">
+                      Periode: {formatDate(selectedReport.periodStart)} - {formatDate(selectedReport.periodEnd)}
                     </p>
-                    <p className="text-sm text-blue-600">{selectedReport.aiSummary}</p>
+                    <p className="text-xs text-gray-400 mt-1">
+                      Dibuat: {formatDate(selectedReport.createdAt)}
+                    </p>
                   </div>
-                )}
+
+                  <div className="prose prose-sm max-w-none">
+                    <div className="text-sm text-gray-700 whitespace-pre-wrap leading-relaxed">
+                      {selectedReport.content}
+                    </div>
+                  </div>
+                </div>
 
                 <div className="flex items-center justify-between pt-3 border-t">
                   <span className="text-sm text-gray-500">Status</span>

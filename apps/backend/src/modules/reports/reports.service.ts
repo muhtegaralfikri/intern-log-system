@@ -7,7 +7,7 @@ export class ReportsService {
 
   async findAll(userId: string, page = 1, limit = 10) {
     const skip = (page - 1) * limit;
-    
+
     const [data, total] = await Promise.all([
       this.prisma.report.findMany({
         where: { userId },
@@ -35,14 +35,17 @@ export class ReportsService {
     });
   }
 
-  async create(userId: string, data: {
-    title: string;
-    content: string;
-    type: string;
-    periodStart: Date;
-    periodEnd: Date;
-    aiSummary?: string;
-  }) {
+  async create(
+    userId: string,
+    data: {
+      title: string;
+      content: string;
+      type: string;
+      periodStart: Date;
+      periodEnd: Date;
+      aiSummary?: string;
+    },
+  ) {
     return this.prisma.report.create({
       data: {
         userId,

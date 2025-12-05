@@ -21,7 +21,7 @@ export class ActivitiesService {
 
   async findAll(userId: string, page = 1, limit = 10) {
     const skip = (page - 1) * limit;
-    
+
     const [data, total] = await Promise.all([
       this.prisma.activity.findMany({
         where: { userId },

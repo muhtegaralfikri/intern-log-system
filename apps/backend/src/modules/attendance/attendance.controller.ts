@@ -1,5 +1,19 @@
-import { Controller, Post, Get, Body, Param, Query, UseGuards, Request } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiBearerAuth, ApiQuery } from '@nestjs/swagger';
+import {
+  Controller,
+  Post,
+  Get,
+  Body,
+  Param,
+  Query,
+  UseGuards,
+  Request,
+} from '@nestjs/common';
+import {
+  ApiTags,
+  ApiOperation,
+  ApiBearerAuth,
+  ApiQuery,
+} from '@nestjs/swagger';
 import { AttendanceService } from './attendance.service';
 import { CheckInDto, CheckOutDto } from './dto/check-in.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
@@ -66,7 +80,10 @@ export class AttendanceController {
   @Post('validate-location')
   @ApiOperation({ summary: 'Validate if location is within office radius' })
   validateLocation(@Body() body: { latitude: number; longitude: number }) {
-    return this.attendanceService.validateLocation(body.latitude, body.longitude);
+    return this.attendanceService.validateLocation(
+      body.latitude,
+      body.longitude,
+    );
   }
 
   @Get(':id')

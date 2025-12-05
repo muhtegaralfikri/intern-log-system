@@ -1,4 +1,11 @@
-import { Controller, Post, Get, Body, UseGuards, Request } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Get,
+  Body,
+  UseGuards,
+  Request,
+} from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
 import { AiService } from './ai.service';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
@@ -16,7 +23,10 @@ export class AiController {
 
   @Post('summarize')
   @ApiOperation({ summary: 'Summarize activities using AI' })
-  async summarize(@Request() req, @Body() body: { startDate: string; endDate: string }) {
+  async summarize(
+    @Request() req,
+    @Body() body: { startDate: string; endDate: string },
+  ) {
     const activities = await this.prisma.activity.findMany({
       where: {
         userId: req.user.id,
@@ -34,7 +44,10 @@ export class AiController {
 
   @Post('weekly-report')
   @ApiOperation({ summary: 'Generate weekly report using AI' })
-  async generateWeeklyReport(@Request() req, @Body() body: { startDate: string; endDate: string }) {
+  async generateWeeklyReport(
+    @Request() req,
+    @Body() body: { startDate: string; endDate: string },
+  ) {
     const startDate = new Date(body.startDate);
     const endDate = new Date(body.endDate);
 
@@ -49,8 +62,26 @@ export class AiController {
       orderBy: { date: 'asc' },
     });
 
-    const report = await this.aiService.generateWeeklyReport(activities, startDate, endDate);
-    return { report };
+    const reportContent = await this.aiService.generateWeeklyReport(
+      activities,
+      startDate,
+      endDate,
+    );
+
+    // Save report to database
+    const report = await this.prisma.report.create({
+      data: {
+        userId: req.user.id,
+        title: `Laporan Mingguan ${startDate.toLocaleDateString('id-ID')} - ${endDate.toLocaleDateString('id-ID')}`,
+        content: reportContent,
+        aiSummary: reportContent.substring(0, 500),
+        type: 'weekly',
+        periodStart: startDate,
+        periodEnd: endDate,
+      },
+    });
+
+    return report;
   }
 
   @Get('suggest-tasks')
@@ -68,7 +99,10 @@ export class AiController {
       }),
     ]);
 
-    const suggestions = await this.aiService.suggestTasks(userSkills, recentActivities);
+    const suggestions = await this.aiService.suggestTasks(
+      userSkills,
+      recentActivities,
+    );
     return { suggestions };
   }
 
@@ -92,7 +126,8 @@ export class AiController {
       },
     });
 
-    const questions = await this.aiService.generateReflectionQuestions(activities);
+    const questions =
+      await this.aiService.generateReflectionQuestions(activities);
     return { questions };
   }
 }

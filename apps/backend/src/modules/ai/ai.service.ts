@@ -54,6 +54,11 @@ Ringkasan:`;
       return this.fallbackWeeklyReport(activities, startDate, endDate);
     }
 
+    const totalMinutes = activities.reduce((sum, a) => sum + a.duration, 0);
+    const totalHours = Math.floor(totalMinutes / 60);
+    const remainingMinutes = totalMinutes % 60;
+    const categories = [...new Set(activities.map((a) => a.category))];
+
     const activitiesText = activities
       .map(
         (a) =>
@@ -62,20 +67,39 @@ Ringkasan:`;
       .join('\n');
 
     const prompt = `
-Buatkan laporan mingguan magang dalam bahasa Indonesia yang profesional dan terstruktur.
+Buatkan laporan mingguan magang dalam bahasa Indonesia yang profesional, ringkas, dan siap pakai.
+JANGAN gunakan placeholder seperti [Nama], [Divisi], dll. Langsung tulis konten laporan.
+
 Periode: ${startDate.toLocaleDateString('id-ID')} - ${endDate.toLocaleDateString('id-ID')}
+Total Aktivitas: ${activities.length} kegiatan
+Total Waktu: ${totalHours} jam ${remainingMinutes} menit
+Kategori: ${categories.join(', ')}
 
 Aktivitas yang dilakukan:
-${activitiesText}
+${activitiesText || 'Tidak ada aktivitas tercatat pada periode ini.'}
 
-Format laporan:
-1. Ringkasan Eksekutif (2-3 kalimat)
-2. Kegiatan Utama (bullet points)
-3. Pencapaian/Output
-4. Tantangan (jika ada)
-5. Rencana Minggu Depan (saran)
+Format laporan (gunakan format markdown yang bersih):
 
-Laporan:`;
+# Laporan Mingguan
+**Periode: ${startDate.toLocaleDateString('id-ID')} - ${endDate.toLocaleDateString('id-ID')}**
+
+## Ringkasan
+(Tulis 2-3 kalimat ringkasan kegiatan minggu ini berdasarkan data aktivitas di atas)
+
+## Kegiatan yang Dilakukan
+(List kegiatan dalam bullet points berdasarkan data di atas, kelompokkan per kategori jika perlu)
+
+## Pencapaian
+(List pencapaian/output yang dihasilkan)
+
+## Total Waktu Kerja
+- Total: ${totalHours} jam ${remainingMinutes} menit
+- Jumlah Aktivitas: ${activities.length}
+
+## Catatan & Rencana
+(Berikan insight singkat dan rencana untuk minggu depan)
+
+Tulis laporan langsung tanpa placeholder:`;
 
     try {
       const result = await this.model.generateContent(prompt);
@@ -86,13 +110,21 @@ Laporan:`;
     }
   }
 
-  async suggestTasks(userSkills: any[], recentActivities: any[]): Promise<string[]> {
+  async suggestTasks(
+    userSkills: any[],
+    recentActivities: any[],
+  ): Promise<string[]> {
     if (!this.model) {
       return this.fallbackSuggestions();
     }
 
-    const skillsText = userSkills.map((s) => `${s.skill.name} (Level: ${s.level})`).join(', ');
-    const recentText = recentActivities.slice(0, 5).map((a) => a.title).join(', ');
+    const skillsText = userSkills
+      .map((s) => `${s.skill.name} (Level: ${s.level})`)
+      .join(', ');
+    const recentText = recentActivities
+      .slice(0, 5)
+      .map((a) => a.title)
+      .join(', ');
 
     const prompt = `
 Berdasarkan skill dan aktivitas terbaru intern berikut, sarankan 3-5 task untuk pengembangan skill.
@@ -148,7 +180,7 @@ Hanya output JSON array.`;
         return JSON.parse(jsonMatch[0]);
       }
       return defaultPrompts;
-    } catch (error) {
+    } catch {
       return defaultPrompts;
     }
   }
@@ -182,7 +214,7 @@ Hanya output JSON array.`;
         return JSON.parse(jsonMatch[0]);
       }
       return defaultQuestions;
-    } catch (error) {
+    } catch {
       return defaultQuestions;
     }
   }
