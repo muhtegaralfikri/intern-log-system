@@ -56,13 +56,13 @@ export default function RegisterPage() {
   return (
     <Card className="w-full">
       <div className="text-center mb-6 lg:mb-8">
-        <h1 className="text-2xl font-bold text-gray-900">Daftar Akun</h1>
-        <p className="text-gray-600 mt-2">Buat akun baru untuk memulai</p>
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Daftar Akun</h1>
+        <p className="text-gray-600 dark:text-slate-400 mt-2">Buat akun baru untuk memulai</p>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-4">
         {error && (
-          <div className="p-3 bg-red-50 border border-red-200 rounded-lg text-red-600 text-sm">
+          <div className="p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg text-red-600 dark:text-red-400 text-sm">
             {error}
           </div>
         )}
@@ -112,9 +112,9 @@ export default function RegisterPage() {
         </Button>
       </form>
 
-      <p className="text-center text-sm text-gray-600 mt-6">
+      <p className="text-center text-sm text-gray-600 dark:text-slate-400 mt-6">
         Sudah punya akun?{' '}
-        <Link href="/login" className="text-blue-600 hover:underline font-medium">
+        <Link href="/login" className="text-blue-600 dark:text-blue-400 hover:underline font-medium">
           Masuk disini
         </Link>
       </p>

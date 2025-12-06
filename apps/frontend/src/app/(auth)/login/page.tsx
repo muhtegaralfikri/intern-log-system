@@ -38,13 +38,13 @@ export default function LoginPage() {
   return (
     <Card className="w-full">
       <div className="text-center mb-6 lg:mb-8">
-        <h1 className="text-2xl font-bold text-gray-900">Intern Log System</h1>
-        <p className="text-gray-600 mt-2">Masuk ke akun Anda</p>
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Intern Log System</h1>
+        <p className="text-gray-600 dark:text-slate-400 mt-2">Masuk ke akun Anda</p>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-4">
         {error && (
-          <div className="p-3 bg-red-50 border border-red-200 rounded-lg text-red-600 text-sm">
+          <div className="p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg text-red-600 dark:text-red-400 text-sm">
             {error}
           </div>
         )}
@@ -74,9 +74,9 @@ export default function LoginPage() {
         </Button>
       </form>
 
-      <p className="text-center text-sm text-gray-600 mt-6">
+      <p className="text-center text-sm text-gray-600 dark:text-slate-400 mt-6">
         Belum punya akun?{' '}
-        <Link href="/register" className="text-blue-600 hover:underline font-medium">
+        <Link href="/register" className="text-blue-600 dark:text-blue-400 hover:underline font-medium">
           Daftar disini
         </Link>
       </p>

@@ -1,20 +1,22 @@
 import Link from 'next/link';
+import { ThemeToggle } from '@/components/ui/ThemeToggle';
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50 dark:from-gray-900 dark:via-gray-800 dark:to-indigo-950 transition-colors">
       <nav className="flex items-center justify-between px-8 py-4 max-w-7xl mx-auto">
-        <h1 className="text-xl font-bold text-gray-900">Intern Log</h1>
-        <div className="flex gap-4">
+        <h1 className="text-xl font-bold text-gray-900 dark:text-white">Intern Log</h1>
+        <div className="flex items-center gap-4">
+          <ThemeToggle />
           <Link
             href="/login"
-            className="px-4 py-2 text-gray-700 hover:text-gray-900 font-medium"
+            className="px-4 py-2 text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white font-medium transition-colors"
           >
             Masuk
           </Link>
           <Link
             href="/register"
-            className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium"
+            className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 font-medium transition-colors"
           >
             Daftar
           </Link>
@@ -23,23 +25,23 @@ export default function Home() {
 
       <main className="max-w-7xl mx-auto px-4 lg:px-8 py-12 lg:py-20">
         <div className="text-center max-w-3xl mx-auto">
-          <h2 className="text-3xl lg:text-5xl font-bold text-gray-900 mb-4 lg:mb-6">
-            Sistem Pencatatan <span className="text-blue-600">Aktivitas Intern</span>
+          <h2 className="text-3xl lg:text-5xl font-bold text-gray-900 dark:text-white mb-4 lg:mb-6">
+            Sistem Pencatatan <span className="text-blue-600 dark:text-blue-400">Aktivitas Intern</span>
           </h2>
-          <p className="text-base lg:text-xl text-gray-600 mb-6 lg:mb-8 px-4">
+          <p className="text-base lg:text-xl text-gray-600 dark:text-gray-300 mb-6 lg:mb-8 px-4">
             Kelola kehadiran, catat aktivitas harian, dan pantau perkembangan magang Anda
             dengan mudah dan efisien.
           </p>
           <div className="flex flex-col sm:flex-row gap-3 lg:gap-4 justify-center px-4">
             <Link
               href="/register"
-              className="px-8 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium text-lg"
+              className="px-8 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 font-medium text-lg transition-colors"
             >
               Mulai Sekarang
             </Link>
             <Link
               href="/login"
-              className="px-8 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 font-medium text-lg"
+              className="px-8 py-3 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 font-medium text-lg transition-colors"
             >
               Sudah Punya Akun
             </Link>
@@ -65,8 +67,8 @@ export default function Home() {
         </div>
       </main>
 
-      <footer className="border-t border-gray-200 mt-12 lg:mt-20">
-        <div className="max-w-7xl mx-auto px-4 lg:px-8 py-6 lg:py-8 text-center text-gray-500 text-sm">
+      <footer className="border-t border-gray-200 dark:border-gray-700 mt-12 lg:mt-20">
+        <div className="max-w-7xl mx-auto px-4 lg:px-8 py-6 lg:py-8 text-center text-gray-500 dark:text-gray-400 text-sm">
           <p>&copy; 2024 Intern Log System. All rights reserved.</p>
         </div>
       </footer>
@@ -76,12 +78,12 @@ export default function Home() {
 
 function FeatureCard({ icon, title, description }: { icon: React.ReactNode; title: string; description: string }) {
   return (
-    <div className="p-6 bg-white rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
-      <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center text-blue-600 mb-4">
+    <div className="p-6 bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 hover:shadow-md dark:hover:shadow-lg dark:hover:shadow-blue-500/10 transition-all">
+      <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center text-blue-600 dark:text-blue-400 mb-4">
         {icon}
       </div>
-      <h3 className="text-lg font-semibold text-gray-900 mb-2">{title}</h3>
-      <p className="text-gray-600">{description}</p>
+      <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">{title}</h3>
+      <p className="text-gray-600 dark:text-gray-300">{description}</p>
     </div>
   );
 }

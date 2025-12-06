@@ -41,13 +41,13 @@ export default function CameraCapture({ onCapture, onClose }: CameraCaptureProps
   };
 
   return (
-    <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50">
-      <div className="bg-white rounded-lg p-4 max-w-md w-full mx-4">
+    <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-[100]">
+      <div className="bg-white dark:bg-slate-800 rounded-lg p-4 max-w-md w-full mx-4">
         <div className="flex justify-between items-center mb-4">
-          <h3 className="text-lg font-semibold">Ambil Foto Selfie</h3>
+          <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Ambil Foto Selfie</h3>
           <button
             onClick={onClose}
-            className="text-gray-500 hover:text-gray-700"
+            className="text-gray-500 dark:text-slate-400 hover:text-gray-700 dark:hover:text-slate-200 transition-colors"
           >
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -79,13 +79,13 @@ export default function CameraCapture({ onCapture, onClose }: CameraCaptureProps
             <>
               <button
                 onClick={retake}
-                className="flex-1 py-2 px-4 border border-gray-300 rounded-lg hover:bg-gray-50"
+                className="flex-1 py-2 px-4 border border-gray-300 dark:border-slate-600 text-gray-700 dark:text-slate-300 rounded-lg hover:bg-gray-50 dark:hover:bg-slate-700 transition-colors"
               >
                 Ulangi
               </button>
               <button
                 onClick={confirm}
-                className="flex-1 py-2 px-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+                className="flex-1 py-2 px-4 bg-blue-600 dark:bg-blue-500 text-white rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors"
               >
                 Gunakan Foto
               </button>
@@ -94,7 +94,7 @@ export default function CameraCapture({ onCapture, onClose }: CameraCaptureProps
             <>
               <button
                 onClick={toggleCamera}
-                className="py-2 px-4 border border-gray-300 rounded-lg hover:bg-gray-50"
+                className="py-2 px-4 border border-gray-300 dark:border-slate-600 text-gray-700 dark:text-slate-300 rounded-lg hover:bg-gray-50 dark:hover:bg-slate-700 transition-colors"
               >
                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
@@ -102,7 +102,7 @@ export default function CameraCapture({ onCapture, onClose }: CameraCaptureProps
               </button>
               <button
                 onClick={capture}
-                className="flex-1 py-2 px-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+                className="flex-1 py-2 px-4 bg-blue-600 dark:bg-blue-500 text-white rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors"
               >
                 Ambil Foto
               </button>

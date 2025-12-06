@@ -50,14 +50,14 @@ export default function SettingsPage() {
 
       <div className="max-w-2xl">
         <Card className="mb-6">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">Informasi Profil</h3>
+          <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Informasi Profil</h3>
 
           {message && (
             <div
               className={`p-3 rounded-lg mb-4 ${
                 message.type === 'success'
-                  ? 'bg-green-50 text-green-700 border border-green-200'
-                  : 'bg-red-50 text-red-700 border border-red-200'
+                  ? 'bg-green-50 dark:bg-green-900/30 text-green-700 dark:text-green-400 border border-green-200 dark:border-green-800'
+                  : 'bg-red-50 dark:bg-red-900/30 text-red-700 dark:text-red-400 border border-red-200 dark:border-red-800'
               }`}
             >
               {message.text}
@@ -100,11 +100,11 @@ export default function SettingsPage() {
 
             {formData.avatarUrl && (
               <div className="flex items-center gap-4">
-                <span className="text-sm text-gray-600">Preview:</span>
+                <span className="text-sm text-gray-600 dark:text-slate-400">Preview:</span>
                 <img
                   src={formData.avatarUrl}
                   alt="Avatar preview"
-                  className="w-16 h-16 rounded-full object-cover border-2 border-gray-200"
+                  className="w-16 h-16 rounded-full object-cover border-2 border-gray-200 dark:border-slate-600"
                   onError={(e) => {
                     (e.target as HTMLImageElement).src = 'https://ui-avatars.com/api/?name=' + encodeURIComponent(formData.name);
                   }}
@@ -121,21 +121,21 @@ export default function SettingsPage() {
         </Card>
 
         <Card className="mb-6">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">Informasi Akun</h3>
+          <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Informasi Akun</h3>
           <div className="space-y-3">
-            <div className="flex justify-between items-center py-2 border-b border-gray-100">
-              <span className="text-gray-600">Role</span>
-              <span className="font-medium text-gray-900 capitalize">
+            <div className="flex justify-between items-center py-2 border-b border-gray-100 dark:border-slate-700">
+              <span className="text-gray-600 dark:text-slate-400">Role</span>
+              <span className="font-medium text-gray-900 dark:text-white capitalize">
                 {user?.role?.toLowerCase() || '-'}
               </span>
             </div>
-            <div className="flex justify-between items-center py-2 border-b border-gray-100">
-              <span className="text-gray-600">User ID</span>
-              <span className="font-mono text-sm text-gray-500">{user?.id || '-'}</span>
+            <div className="flex justify-between items-center py-2 border-b border-gray-100 dark:border-slate-700">
+              <span className="text-gray-600 dark:text-slate-400">User ID</span>
+              <span className="font-mono text-sm text-gray-500 dark:text-slate-400">{user?.id || '-'}</span>
             </div>
             <div className="flex justify-between items-center py-2">
-              <span className="text-gray-600">Bergabung Sejak</span>
-              <span className="font-medium text-gray-900">
+              <span className="text-gray-600 dark:text-slate-400">Bergabung Sejak</span>
+              <span className="font-medium text-gray-900 dark:text-white">
                 {user?.createdAt
                   ? new Date(user.createdAt).toLocaleDateString('id-ID', {
                       day: 'numeric',
@@ -149,8 +149,8 @@ export default function SettingsPage() {
         </Card>
 
         <Card>
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">Keamanan</h3>
-          <p className="text-gray-600 text-sm mb-4">
+          <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Keamanan</h3>
+          <p className="text-gray-600 dark:text-slate-400 text-sm mb-4">
             Untuk keamanan akun, hubungi administrator jika ingin mengubah password.
           </p>
           <Button variant="outline" disabled>
