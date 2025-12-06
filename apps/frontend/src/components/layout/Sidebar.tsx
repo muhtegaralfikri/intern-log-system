@@ -25,21 +25,15 @@ export function Sidebar() {
   const isAdmin = user?.role === 'ADMIN' || user?.role === 'SUPERVISOR';
 
   const toggleTheme = () => {
-    if (theme === 'light') setTheme('dark');
-    else if (theme === 'dark') setTheme('system');
-    else setTheme('light');
+    setTheme(theme === 'light' ? 'dark' : 'light');
   };
 
   const getThemeIcon = () => {
-    if (theme === 'dark') return <MoonIcon className="w-5 h-5" />;
-    if (theme === 'system') return <SystemIcon className="w-5 h-5" />;
-    return <SunIcon className="w-5 h-5" />;
+    return theme === 'dark' ? <MoonIcon className="w-5 h-5" /> : <SunIcon className="w-5 h-5" />;
   };
 
   const getThemeLabel = () => {
-    if (theme === 'dark') return 'Gelap';
-    if (theme === 'system') return 'Sistem';
-    return 'Terang';
+    return theme === 'dark' ? 'Gelap' : 'Terang';
   };
 
   return (
@@ -231,10 +225,4 @@ function MoonIcon({ className }: { className?: string }) {
   );
 }
 
-function SystemIcon({ className }: { className?: string }) {
-  return (
-    <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-      <path strokeLinecap="round" strokeLinejoin="round" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-    </svg>
-  );
-}
+

@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
-type Theme = 'light' | 'dark' | 'system';
+type Theme = 'light' | 'dark';
 
 interface ThemeState {
   theme: Theme;
@@ -11,7 +11,7 @@ interface ThemeState {
 export const useThemeStore = create<ThemeState>()(
   persist(
     (set) => ({
-      theme: 'system',
+      theme: 'light',
       setTheme: (theme) => set({ theme }),
     }),
     {
