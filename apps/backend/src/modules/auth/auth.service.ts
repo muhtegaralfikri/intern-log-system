@@ -11,6 +11,9 @@ import { LoginDto } from './dto/login.dto';
 
 @Injectable()
 export class AuthService {
+  // Updated to cost factor 12 for better security (industry standard 2024)
+  private readonly BCRYPT_ROUNDS = 12;
+
   constructor(
     private prisma: PrismaService,
     private jwtService: JwtService,
@@ -25,7 +28,7 @@ export class AuthService {
       throw new ConflictException('Email already registered');
     }
 
-    const hashedPassword = await bcrypt.hash(dto.password, 10);
+    const hashedPassword = await bcrypt.hash(dto.password, this.BCRYPT_ROUNDS);
 
     const user = await this.prisma.user.create({
       data: {
@@ -66,6 +69,17 @@ export class AuthService {
 
     if (!isPasswordValid) {
       throw new UnauthorizedException('Invalid credentials');
+    }
+
+    // Gradual migration: Re-hash password if using old cost factor
+    const currentCost = this.getCostFactor(user.password);
+    if (currentCost < this.BCRYPT_ROUNDS) {
+      // Re-hash with new cost factor
+      const newHash = await bcrypt.hash(dto.password, this.BCRYPT_ROUNDS);
+      await this.prisma.user.update({
+        where: { id: user.id },
+        data: { password: newHash },
+      });
     }
 
     const token = this.generateToken(user.id, user.email);
@@ -111,5 +125,14 @@ export class AuthService {
       sub: userId,
       email,
     });
+  }
+
+  /**
+   * Extract cost factor from bcrypt hash
+   * Hash format: $2b$10$... where 10 is the cost factor
+   */
+  private getCostFactor(hash: string): number {
+    const parts = hash.split('$');
+    return parseInt(parts[2], 10);
   }
 }
