@@ -3,7 +3,8 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuthStore } from '@/stores/authStore';
-import Link from 'next/link';
+import { AdminSidebar } from '@/components/layout/AdminSidebar';
+import { Header } from '@/components/layout/Header';
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
@@ -22,7 +23,8 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     if (!loading) {
       if (!isAuthenticated) {
         router.push('/login');
-      } else if (user?.role !== 'ADMIN' && user?.role !== 'SUPERVISOR') {
+      } else if (user?.role !== 'ADMIN') {
+        // Only ADMIN can access admin panel
         router.push('/dashboard');
       }
     }
@@ -30,69 +32,35 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-slate-900">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
       </div>
     );
   }
 
-  if (!isAuthenticated || (user?.role !== 'ADMIN' && user?.role !== 'SUPERVISOR')) {
+  if (!isAuthenticated || user?.role !== 'ADMIN') {
     return null;
   }
 
   return (
-    <div className="min-h-screen bg-gray-100 dark:bg-slate-900 transition-colors">
-      <nav className="bg-white dark:bg-slate-800 shadow-sm border-b border-gray-200 dark:border-slate-700">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between h-16">
-            <div className="flex items-center gap-8">
-              <Link href="/admin" className="text-xl font-bold text-blue-600 dark:text-blue-400">
-                Admin Panel
-              </Link>
-              <div className="hidden md:flex items-center gap-4">
-                <Link
-                  href="/admin"
-                  className="text-gray-600 dark:text-slate-300 hover:text-gray-900 dark:hover:text-white px-3 py-2 text-sm font-medium"
-                >
-                  Dashboard
-                </Link>
-                <Link
-                  href="/admin/interns"
-                  className="text-gray-600 dark:text-slate-300 hover:text-gray-900 dark:hover:text-white px-3 py-2 text-sm font-medium"
-                >
-                  Interns
-                </Link>
-                <Link
-                  href="/admin/reports"
-                  className="text-gray-600 dark:text-slate-300 hover:text-gray-900 dark:hover:text-white px-3 py-2 text-sm font-medium"
-                >
-                  Reports
-                </Link>
-                {user?.role === 'ADMIN' && (
-                  <Link
-                    href="/admin/users"
-                    className="text-gray-600 dark:text-slate-300 hover:text-gray-900 dark:hover:text-white px-3 py-2 text-sm font-medium"
-                  >
-                    Users
-                  </Link>
-                )}
-              </div>
-            </div>
-            <div className="flex items-center gap-4">
-              <Link
-                href="/dashboard"
-                className="text-sm text-gray-600 dark:text-slate-300 hover:text-gray-900 dark:hover:text-white"
-              >
-                Kembali ke Dashboard
-              </Link>
-              <span className="text-sm text-gray-500 dark:text-slate-400">
-                {user?.name} ({user?.role})
-              </span>
-            </div>
-          </div>
-        </div>
-      </nav>
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">{children}</main>
+    <div className="min-h-screen bg-gray-50 dark:bg-slate-900 transition-colors">
+      <AdminSidebar />
+      
+      {/* Main Content */}
+      <main className="lg:ml-64 p-4 lg:p-8">
+        <Header 
+          title="Admin Panel" 
+          subtitle="Kelola sistem dan monitor aktivitas"
+        />
+        {children}
+      </main>
+
+      {/* Mobile Menu Button - TODO: Implement mobile sidebar */}
+      <button className="lg:hidden fixed bottom-4 right-4 w-14 h-14 bg-blue-600 text-white rounded-full shadow-lg flex items-center justify-center">
+        <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+      </button>
     </div>
   );
 }

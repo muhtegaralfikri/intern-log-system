@@ -27,7 +27,14 @@ export default function LoginPage() {
       const response = await authApi.login(formData);
       const { user, access_token } = response.data;
       setAuth(user, access_token);
-      router.push('/dashboard');
+      
+      // Role-based routing
+      if (user.role === 'ADMIN') {
+        router.push('/admin');
+      } else {
+        // SUPERVISOR and INTERN go to dashboard
+        router.push('/dashboard');
+      }
     } catch (err: unknown) {
       const error = err as { response?: { data?: { message?: string } } };
       setError(error.response?.data?.message || 'Login gagal. Periksa email dan password.');

@@ -43,7 +43,7 @@ export function Sidebar() {
         <p className="text-sm text-gray-500 dark:text-slate-400 mt-1">Sistem Pencatatan Intern</p>
       </div>
 
-      <nav className="flex-1 p-4 overflow-y-auto">
+      <nav className="flex-1 p-4 overflow-y-auto scrollbar-custom">
         <ul className="space-y-1">
           {menuItems.map((item) => {
             const isActive = pathname === item.href || 
