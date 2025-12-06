@@ -134,28 +134,28 @@ export default function MoodPage() {
         <Card>
           <div className="text-center">
             <p className="text-4xl mb-2">{todayMood ? moodEmojis[todayMood.mood] : '❓'}</p>
-            <p className="text-gray-600 text-sm">Mood Hari Ini</p>
+            <p className="text-gray-600 dark:text-slate-400 text-sm">Mood Hari Ini</p>
             {todayMood && (
-              <p className="text-xs text-gray-500 mt-1">{moodLabels[todayMood.mood]}</p>
+              <p className="text-xs text-gray-500 dark:text-slate-500 mt-1">{moodLabels[todayMood.mood]}</p>
             )}
           </div>
         </Card>
         <Card>
           <div className="text-center">
-            <p className="text-3xl font-bold text-blue-600">
+            <p className="text-3xl font-bold text-blue-600 dark:text-blue-400">
               {analytics?.avgMood?.toFixed(1) || '-'}
             </p>
-            <p className="text-gray-600 text-sm">Rata-rata Mood</p>
-            <p className="text-xs text-gray-500">(skala 1-5)</p>
+            <p className="text-gray-600 dark:text-slate-400 text-sm">Rata-rata Mood</p>
+            <p className="text-xs text-gray-500 dark:text-slate-500">(skala 1-5)</p>
           </div>
         </Card>
         <Card>
           <div className="text-center">
-            <p className="text-3xl font-bold text-green-600">
+            <p className="text-3xl font-bold text-green-600 dark:text-green-400">
               {analytics?.avgEnergy?.toFixed(1) || '-'}
             </p>
-            <p className="text-gray-600 text-sm">Rata-rata Energi</p>
-            <p className="text-xs text-gray-500">(skala 1-5)</p>
+            <p className="text-gray-600 dark:text-slate-400 text-sm">Rata-rata Energi</p>
+            <p className="text-xs text-gray-500 dark:text-slate-500">(skala 1-5)</p>
           </div>
         </Card>
       </div>
@@ -168,12 +168,12 @@ export default function MoodPage() {
 
       {showForm && (
         <Card className="mb-6">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">
+          <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
             {todayMood ? 'Update Mood Hari Ini' : 'Catat Mood Hari Ini'}
           </h3>
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-3">
+              <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-3">
                 Bagaimana mood Anda hari ini?
               </label>
               <div className="flex justify-center gap-4">
@@ -184,19 +184,19 @@ export default function MoodPage() {
                     onClick={() => setFormData({ ...formData, mood })}
                     className={`p-4 rounded-xl transition-all ${
                       formData.mood === mood
-                        ? 'bg-blue-100 ring-2 ring-blue-500 scale-110'
-                        : 'bg-gray-100 hover:bg-gray-200'
+                        ? 'bg-blue-100 dark:bg-blue-900/50 ring-2 ring-blue-500 scale-110'
+                        : 'bg-gray-100 dark:bg-slate-700 hover:bg-gray-200 dark:hover:bg-slate-600'
                     }`}
                   >
                     <span className="text-4xl block">{moodEmojis[mood]}</span>
-                    <span className="text-xs text-gray-600 mt-1 block">{moodLabels[mood]}</span>
+                    <span className="text-xs text-gray-600 dark:text-slate-400 mt-1 block">{moodLabels[mood]}</span>
                   </button>
                 ))}
               </div>
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-3">
+              <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-3">
                 Level energi Anda: <span className="font-bold">{energyLabels[formData.energy]}</span>
               </label>
               <input
@@ -205,9 +205,9 @@ export default function MoodPage() {
                 max="5"
                 value={formData.energy}
                 onChange={(e) => setFormData({ ...formData, energy: parseInt(e.target.value) })}
-                className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
+                className="w-full h-2 bg-gray-200 dark:bg-slate-600 rounded-lg appearance-none cursor-pointer"
               />
-              <div className="flex justify-between text-xs text-gray-500 mt-1">
+              <div className="flex justify-between text-xs text-gray-500 dark:text-slate-400 mt-1">
                 <span>1</span>
                 <span>2</span>
                 <span>3</span>
@@ -217,11 +217,11 @@ export default function MoodPage() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">
                 Catatan (opsional)
               </label>
               <textarea
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
                 rows={3}
                 placeholder="Apa yang membuat Anda merasa seperti ini?"
                 value={formData.notes}
@@ -243,47 +243,47 @@ export default function MoodPage() {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <Card>
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">Riwayat Mood</h3>
+          <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Riwayat Mood</h3>
           {history.length > 0 ? (
             <div className="space-y-3 max-h-96 overflow-y-auto">
               {history.map((entry) => (
                 <div
                   key={entry.id}
-                  className="flex items-center gap-4 p-3 bg-gray-50 rounded-lg"
+                  className="flex items-center gap-4 p-3 bg-gray-50 dark:bg-slate-700/50 rounded-lg"
                 >
                   <span className="text-3xl">{moodEmojis[entry.mood]}</span>
                   <div className="flex-1">
                     <div className="flex justify-between items-center">
-                      <span className="font-medium text-gray-900">{moodLabels[entry.mood]}</span>
-                      <span className="text-sm text-gray-500">{formatDate(entry.date)}</span>
+                      <span className="font-medium text-gray-900 dark:text-white">{moodLabels[entry.mood]}</span>
+                      <span className="text-sm text-gray-500 dark:text-slate-400">{formatDate(entry.date)}</span>
                     </div>
                     <div className="flex items-center gap-2 mt-1">
-                      <span className="text-xs text-gray-500">Energi:</span>
+                      <span className="text-xs text-gray-500 dark:text-slate-400">Energi:</span>
                       <div className="flex">
                         {[1, 2, 3, 4, 5].map((i) => (
                           <span
                             key={i}
                             className={`w-3 h-3 rounded-full mr-0.5 ${
-                              i <= entry.energy ? 'bg-green-500' : 'bg-gray-300'
+                              i <= entry.energy ? 'bg-green-500' : 'bg-gray-300 dark:bg-slate-600'
                             }`}
                           />
                         ))}
                       </div>
                     </div>
                     {entry.notes && (
-                      <p className="text-xs text-gray-600 mt-1">{entry.notes}</p>
+                      <p className="text-xs text-gray-600 dark:text-slate-400 mt-1">{entry.notes}</p>
                     )}
                   </div>
                 </div>
               ))}
             </div>
           ) : (
-            <p className="text-gray-500 text-center py-8">Belum ada riwayat mood</p>
+            <p className="text-gray-500 dark:text-slate-400 text-center py-8">Belum ada riwayat mood</p>
           )}
         </Card>
 
         <Card>
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">Distribusi Mood</h3>
+          <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Distribusi Mood</h3>
           {analytics?.moodDistribution && Object.keys(analytics.moodDistribution).length > 0 ? (
             <div className="space-y-3">
               {(Object.keys(moodEmojis) as MoodLevel[]).map((mood) => {
@@ -295,11 +295,11 @@ export default function MoodPage() {
                     <div className="flex justify-between items-center mb-1">
                       <span className="flex items-center gap-2">
                         <span className="text-xl">{moodEmojis[mood]}</span>
-                        <span className="text-sm text-gray-700">{moodLabels[mood]}</span>
+                        <span className="text-sm text-gray-700 dark:text-slate-300">{moodLabels[mood]}</span>
                       </span>
-                      <span className="text-sm text-gray-600">{count}x ({percentage}%)</span>
+                      <span className="text-sm text-gray-600 dark:text-slate-400">{count}x ({percentage}%)</span>
                     </div>
-                    <div className="w-full bg-gray-200 rounded-full h-2">
+                    <div className="w-full bg-gray-200 dark:bg-slate-600 rounded-full h-2">
                       <div
                         className="h-2 rounded-full bg-blue-500"
                         style={{ width: `${percentage}%` }}
@@ -310,7 +310,7 @@ export default function MoodPage() {
               })}
             </div>
           ) : (
-            <p className="text-gray-500 text-center py-8">Belum ada data distribusi</p>
+            <p className="text-gray-500 dark:text-slate-400 text-center py-8">Belum ada data distribusi</p>
           )}
         </Card>
       </div>
