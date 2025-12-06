@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { Header } from '@/components/layout/Header';
 import { Card } from '@/components/ui';
+import { TimeAnalytics } from '@/components/dashboard/TimeAnalytics';
 import { attendanceApi } from '@/lib/api';
 import { useAuthStore } from '@/stores/authStore';
 
@@ -86,54 +87,58 @@ export default function DashboardPage() {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6">
         <Card>
-          <h2 className="text-lg font-semibold text-gray-900 mb-4">Ringkasan Kehadiran Bulan Ini</h2>
+          <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Ringkasan Kehadiran Bulan Ini</h2>
           {loading ? (
             <div className="h-40 flex items-center justify-center">
               <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600"></div>
             </div>
           ) : (
             <div className="grid grid-cols-2 gap-4">
-              <div className="p-4 bg-green-50 rounded-lg">
-                <p className="text-2xl font-bold text-green-600">{summary?.present || 0}</p>
-                <p className="text-sm text-green-700">Hadir</p>
+              <div className="p-4 bg-green-50 dark:bg-green-900/30 rounded-lg">
+                <p className="text-2xl font-bold text-green-600 dark:text-green-400">{summary?.present || 0}</p>
+                <p className="text-sm text-green-700 dark:text-green-300">Hadir</p>
               </div>
-              <div className="p-4 bg-red-50 rounded-lg">
-                <p className="text-2xl font-bold text-red-600">{summary?.absent || 0}</p>
-                <p className="text-sm text-red-700">Tidak Hadir</p>
+              <div className="p-4 bg-red-50 dark:bg-red-900/30 rounded-lg">
+                <p className="text-2xl font-bold text-red-600 dark:text-red-400">{summary?.absent || 0}</p>
+                <p className="text-sm text-red-700 dark:text-red-300">Tidak Hadir</p>
               </div>
-              <div className="p-4 bg-yellow-50 rounded-lg">
-                <p className="text-2xl font-bold text-yellow-600">{summary?.late || 0}</p>
-                <p className="text-sm text-yellow-700">Terlambat</p>
+              <div className="p-4 bg-yellow-50 dark:bg-yellow-900/30 rounded-lg">
+                <p className="text-2xl font-bold text-yellow-600 dark:text-yellow-400">{summary?.late || 0}</p>
+                <p className="text-sm text-yellow-700 dark:text-yellow-300">Terlambat</p>
               </div>
-              <div className="p-4 bg-blue-50 rounded-lg">
-                <p className="text-2xl font-bold text-blue-600">{summary?.leave || 0}</p>
-                <p className="text-sm text-blue-700">Izin/Cuti</p>
+              <div className="p-4 bg-blue-50 dark:bg-blue-900/30 rounded-lg">
+                <p className="text-2xl font-bold text-blue-600 dark:text-blue-400">{summary?.leave || 0}</p>
+                <p className="text-sm text-blue-700 dark:text-blue-300">Izin/Cuti</p>
               </div>
             </div>
           )}
         </Card>
 
         <Card>
-          <h2 className="text-lg font-semibold text-gray-900 mb-4">Informasi Profil</h2>
+          <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Informasi Profil</h2>
           <div className="space-y-3">
-            <div className="flex justify-between py-2 border-b border-gray-100">
-              <span className="text-gray-500">Nama</span>
-              <span className="font-medium text-gray-900">{user?.name}</span>
+            <div className="flex justify-between py-2 border-b border-gray-100 dark:border-slate-700">
+              <span className="text-gray-500 dark:text-slate-400">Nama</span>
+              <span className="font-medium text-gray-900 dark:text-white">{user?.name}</span>
             </div>
-            <div className="flex justify-between py-2 border-b border-gray-100">
-              <span className="text-gray-500">Email</span>
-              <span className="font-medium text-gray-900">{user?.email}</span>
+            <div className="flex justify-between py-2 border-b border-gray-100 dark:border-slate-700">
+              <span className="text-gray-500 dark:text-slate-400">Email</span>
+              <span className="font-medium text-gray-900 dark:text-white">{user?.email}</span>
             </div>
-            <div className="flex justify-between py-2 border-b border-gray-100">
-              <span className="text-gray-500">Role</span>
-              <span className="font-medium text-gray-900">{user?.role}</span>
+            <div className="flex justify-between py-2 border-b border-gray-100 dark:border-slate-700">
+              <span className="text-gray-500 dark:text-slate-400">Role</span>
+              <span className="font-medium text-gray-900 dark:text-white">{user?.role}</span>
             </div>
             <div className="flex justify-between py-2">
-              <span className="text-gray-500">Department</span>
-              <span className="font-medium text-gray-900">{user?.department || '-'}</span>
+              <span className="text-gray-500 dark:text-slate-400">Department</span>
+              <span className="font-medium text-gray-900 dark:text-white">{user?.department || '-'}</span>
             </div>
           </div>
         </Card>
+      </div>
+
+      <div className="mt-6 lg:mt-8">
+        <TimeAnalytics />
       </div>
     </div>
   );
@@ -149,10 +154,10 @@ interface StatCardProps {
 
 function StatCard({ title, value, icon, color, loading }: StatCardProps) {
   const colors = {
-    blue: 'bg-blue-50 text-blue-600',
-    green: 'bg-green-50 text-green-600',
-    orange: 'bg-orange-50 text-orange-600',
-    purple: 'bg-purple-50 text-purple-600',
+    blue: 'bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400',
+    green: 'bg-green-50 dark:bg-green-900/30 text-green-600 dark:text-green-400',
+    orange: 'bg-orange-50 dark:bg-orange-900/30 text-orange-600 dark:text-orange-400',
+    purple: 'bg-purple-50 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400',
   };
 
   return (
@@ -162,11 +167,11 @@ function StatCard({ title, value, icon, color, loading }: StatCardProps) {
           {icon}
         </div>
         <div>
-          <p className="text-xs lg:text-sm text-gray-500">{title}</p>
+          <p className="text-xs lg:text-sm text-gray-500 dark:text-slate-400">{title}</p>
           {loading ? (
-            <div className="h-5 lg:h-7 w-12 lg:w-16 bg-gray-200 animate-pulse rounded mt-1"></div>
+            <div className="h-5 lg:h-7 w-12 lg:w-16 bg-gray-200 dark:bg-slate-700 animate-pulse rounded mt-1"></div>
           ) : (
-            <p className="text-base lg:text-xl font-semibold text-gray-900">{value}</p>
+            <p className="text-base lg:text-xl font-semibold text-gray-900 dark:text-white">{value}</p>
           )}
         </div>
       </div>

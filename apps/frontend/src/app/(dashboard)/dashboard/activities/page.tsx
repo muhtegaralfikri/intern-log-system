@@ -98,16 +98,16 @@ export default function ActivitiesPage() {
 
   const getCategoryColor = (category: string) => {
     const colors: Record<string, string> = {
-      Development: 'bg-blue-100 text-blue-700',
-      Design: 'bg-purple-100 text-purple-700',
-      Meeting: 'bg-yellow-100 text-yellow-700',
-      Research: 'bg-green-100 text-green-700',
-      Documentation: 'bg-gray-100 text-gray-700',
-      Learning: 'bg-indigo-100 text-indigo-700',
-      Testing: 'bg-orange-100 text-orange-700',
-      Other: 'bg-pink-100 text-pink-700',
+      Development: 'bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300',
+      Design: 'bg-purple-100 dark:bg-purple-900/40 text-purple-700 dark:text-purple-300',
+      Meeting: 'bg-yellow-100 dark:bg-yellow-900/40 text-yellow-700 dark:text-yellow-300',
+      Research: 'bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-300',
+      Documentation: 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300',
+      Learning: 'bg-indigo-100 dark:bg-indigo-900/40 text-indigo-700 dark:text-indigo-300',
+      Testing: 'bg-orange-100 dark:bg-orange-900/40 text-orange-700 dark:text-orange-300',
+      Other: 'bg-pink-100 dark:bg-pink-900/40 text-pink-700 dark:text-pink-300',
     };
-    return colors[category] || 'bg-gray-100 text-gray-700';
+    return colors[category] || 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300';
   };
 
   return (
@@ -116,7 +116,7 @@ export default function ActivitiesPage() {
 
       <div className="flex justify-between items-center mb-6">
         <div>
-          <p className="text-gray-600">
+          <p className="text-gray-600 dark:text-slate-400">
             Total: <span className="font-semibold">{activities.length}</span> aktivitas
           </p>
         </div>
@@ -127,7 +127,7 @@ export default function ActivitiesPage() {
 
       {showForm && (
         <Card className="mb-6">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">Tambah Aktivitas Baru</h3>
+          <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Tambah Aktivitas Baru</h3>
           <form onSubmit={handleSubmit} className="space-y-4">
             <Input
               id="title"
@@ -139,9 +139,9 @@ export default function ActivitiesPage() {
             />
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Deskripsi</label>
+              <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">Deskripsi</label>
               <textarea
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
                 rows={3}
                 placeholder="Jelaskan detail aktivitas yang dilakukan..."
                 value={formData.description}
@@ -152,9 +152,9 @@ export default function ActivitiesPage() {
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Kategori</label>
+                <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">Kategori</label>
                 <select
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
                   value={formData.category}
                   onChange={(e) => setFormData({ ...formData, category: e.target.value })}
                 >
@@ -165,10 +165,10 @@ export default function ActivitiesPage() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Durasi (menit)</label>
+                <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">Durasi (menit)</label>
                 <input
                   type="number"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
                   value={formData.duration}
                   onChange={(e) => setFormData({ ...formData, duration: parseInt(e.target.value) || 0 })}
                   min="1"
@@ -177,10 +177,10 @@ export default function ActivitiesPage() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Tanggal</label>
+                <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">Tanggal</label>
                 <input
                   type="date"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
                   value={formData.date}
                   onChange={(e) => setFormData({ ...formData, date: e.target.value })}
                   required
@@ -201,9 +201,9 @@ export default function ActivitiesPage() {
           {[1, 2, 3].map((i) => (
             <Card key={i}>
               <div className="animate-pulse space-y-3">
-                <div className="h-5 bg-gray-200 rounded w-1/3"></div>
-                <div className="h-4 bg-gray-200 rounded w-2/3"></div>
-                <div className="h-4 bg-gray-200 rounded w-1/4"></div>
+                <div className="h-5 bg-gray-200 dark:bg-slate-700 rounded w-1/3"></div>
+                <div className="h-4 bg-gray-200 dark:bg-slate-700 rounded w-2/3"></div>
+                <div className="h-4 bg-gray-200 dark:bg-slate-700 rounded w-1/4"></div>
               </div>
             </Card>
           ))}
@@ -211,10 +211,10 @@ export default function ActivitiesPage() {
       ) : activities.length === 0 ? (
         <Card>
           <div className="text-center py-12">
-            <svg className="w-16 h-16 text-gray-300 mx-auto mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <svg className="w-16 h-16 text-gray-300 dark:text-slate-600 mx-auto mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
             </svg>
-            <p className="text-gray-500 mb-4">Belum ada aktivitas tercatat</p>
+            <p className="text-gray-500 dark:text-slate-400 mb-4">Belum ada aktivitas tercatat</p>
             <Button onClick={() => setShowForm(true)}>Tambah Aktivitas Pertama</Button>
           </div>
         </Card>
@@ -225,13 +225,13 @@ export default function ActivitiesPage() {
               <div className="flex items-start justify-between">
                 <div className="flex-1">
                   <div className="flex items-center gap-3 mb-2">
-                    <h3 className="font-semibold text-gray-900">{activity.title}</h3>
+                    <h3 className="font-semibold text-gray-900 dark:text-white">{activity.title}</h3>
                     <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${getCategoryColor(activity.category)}`}>
                       {activity.category}
                     </span>
                   </div>
-                  <p className="text-gray-600 text-sm mb-3">{activity.description}</p>
-                  <div className="flex items-center gap-4 text-sm text-gray-500">
+                  <p className="text-gray-600 dark:text-slate-400 text-sm mb-3">{activity.description}</p>
+                  <div className="flex items-center gap-4 text-sm text-gray-500 dark:text-slate-400">
                     <span className="flex items-center gap-1">
                       <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />

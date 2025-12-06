@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Sistem digital untuk mencatat dan memantau aktivitas intern",
   "scripts": {
+    "dev": "node scripts/show-urls.js && concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
     "dev:backend": "cd apps/backend && npm run start:dev",
     "dev:frontend": "cd apps/frontend && npm run dev",
     "build:backend": "cd apps/backend && npm run build",
@@ -21,5 +22,8 @@
     "ai"
   ],
   "author": "",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "concurrently": "^9.2.1"
+  }
 }

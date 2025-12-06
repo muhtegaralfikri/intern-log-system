@@ -275,7 +275,7 @@ ollama run llama3
 ### DevOps & Tools
 | Teknologi | Fungsi | Biaya |
 |-----------|--------|-------|
-| Docker | Containerization | Gratis |
+| Podman | Containerization | Gratis |
 | Git | Version control | Gratis |
 
 ---
@@ -825,7 +825,7 @@ intern-log-system/
 
 - Node.js 18+
 - PostgreSQL 14+ (atau gunakan Neon/Supabase gratis)
-- Docker (optional)
+- Podman (optional, untuk menjalankan database lokal)
 - Google Gemini API Key (GRATIS) atau Groq API Key (GRATIS)
 
 ### Installation
@@ -852,8 +852,9 @@ cp apps/frontend/.env.example apps/frontend/.env
 # Frontend .env:
 # NEXT_PUBLIC_API_URL="http://localhost:3001"
 
-# 5. Start database with Docker
-docker-compose up -d postgres
+# 5. Start database with Podman
+podman-compose up -d postgres
+# atau: podman run -d --name intern-log-db -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=postgres -e POSTGRES_DB=intern_log -p 5432:5432 postgres:15-alpine
 
 # 6. Run database migrations
 cd apps/backend
@@ -870,11 +871,11 @@ cd apps/frontend
 npm run dev
 ```
 
-### Docker Setup (Alternative)
+### Podman Setup (Alternative)
 
 ```bash
 # Build and run all services
-docker-compose up --build
+podman-compose up --build
 
 # Services:
 # - Frontend: http://localhost:3000

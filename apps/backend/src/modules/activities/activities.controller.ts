@@ -13,6 +13,7 @@ import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { ActivitiesService } from './activities.service';
 import { CreateActivityDto } from './dto/create-activity.dto';
+import { CreateAttachmentDto } from './dto/create-attachment.dto';
 
 @ApiTags('Activities')
 @Controller('activities')
@@ -51,5 +52,39 @@ export class ActivitiesController {
   @ApiOperation({ summary: 'Delete activity' })
   remove(@Request() req, @Param('id') id: string) {
     return this.activitiesService.remove(id, req.user.id);
+  }
+
+  @Get('analytics/summary')
+  @ApiOperation({ summary: 'Get activity analytics' })
+  getAnalytics(@Request() req, @Query('days') days?: string) {
+    return this.activitiesService.getAnalytics(
+      req.user.id,
+      days ? parseInt(days) : 30,
+    );
+  }
+
+  @Post(':id/attachments')
+  @ApiOperation({ summary: 'Add attachment to activity' })
+  addAttachment(
+    @Request() req,
+    @Param('id') activityId: string,
+    @Body() dto: CreateAttachmentDto,
+  ) {
+    return this.activitiesService.addAttachment(activityId, req.user.id, dto);
+  }
+
+  @Get(':id/attachments')
+  @ApiOperation({ summary: 'Get activity attachments' })
+  getAttachments(@Param('id') activityId: string) {
+    return this.activitiesService.getAttachments(activityId);
+  }
+
+  @Delete('attachments/:attachmentId')
+  @ApiOperation({ summary: 'Delete attachment' })
+  removeAttachment(
+    @Request() req,
+    @Param('attachmentId') attachmentId: string,
+  ) {
+    return this.activitiesService.removeAttachment(attachmentId, req.user.id);
   }
 }
