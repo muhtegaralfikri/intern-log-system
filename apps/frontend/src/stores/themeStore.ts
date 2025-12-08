@@ -5,33 +5,33 @@ type Theme = 'light' | 'dark';
 
 interface ThemeState {
   theme: Theme;
-  _hasHydrated: boolean;
   setTheme: (theme: Theme) => void;
+}
+
+function applyThemeToDOM(theme: Theme) {
+  if (typeof document !== 'undefined') {
+    if (theme === 'dark') {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  }
 }
 
 export const useThemeStore = create<ThemeState>()(
   persist(
     (set) => ({
       theme: 'light',
-      _hasHydrated: false,
-      setTheme: (theme) => {
-        set({ theme });
-        // Apply theme immediately when changed
-        if (typeof document !== 'undefined') {
-          document.documentElement.classList.toggle('dark', theme === 'dark');
-        }
+      setTheme: (newTheme: Theme) => {
+        set({ theme: newTheme });
+        applyThemeToDOM(newTheme);
       },
     }),
     {
       name: 'theme-storage',
-      partialize: (state) => ({ theme: state.theme }),
       onRehydrateStorage: () => (state) => {
         if (state) {
-          state._hasHydrated = true;
-          // Apply theme after hydration
-          if (typeof document !== 'undefined') {
-            document.documentElement.classList.toggle('dark', state.theme === 'dark');
-          }
+          applyThemeToDOM(state.theme);
         }
       },
     }
