@@ -23,6 +23,6 @@ COPY --from=builder /app/prisma ./prisma
 
 USER nestjs
 
-EXPOSE 3001
+EXPOSE 5001
 
 CMD ["node", "dist/src/main.js"]

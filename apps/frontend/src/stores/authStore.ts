@@ -52,7 +52,7 @@ export const useAuthStore = create<AuthState>()(
         }
         try {
           const response = await fetch(
-            `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001'}/auth/profile`,
+            `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001'}/auth/profile`,
             {
               headers: { Authorization: `Bearer ${token}` },
             }
