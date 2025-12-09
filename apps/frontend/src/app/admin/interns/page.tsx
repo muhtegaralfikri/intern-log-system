@@ -58,9 +58,9 @@ export default function InternsPage() {
 
   return (
     <div>
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Daftar Intern</h1>
-        <p className="text-gray-600 dark:text-slate-400">Total: {meta?.total || 0} intern</p>
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 mb-6">
+        <h1 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white">Daftar Intern</h1>
+        <p className="text-sm text-gray-600 dark:text-slate-400">Total: {meta?.total || 0} intern</p>
       </div>
 
       {loading ? (
@@ -86,16 +86,17 @@ export default function InternsPage() {
           <div className="space-y-4">
             {interns.map((intern) => (
               <Card key={intern.id}>
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-4">
+                <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+                  {/* Profile Info */}
+                  <div className="flex items-center gap-3 sm:gap-4">
                     <img
                       src={intern.avatarUrl || `https://ui-avatars.com/api/?name=${encodeURIComponent(intern.name)}`}
                       alt={intern.name}
-                      className="w-12 h-12 rounded-full object-cover"
+                      className="w-10 h-10 sm:w-12 sm:h-12 rounded-full object-cover flex-shrink-0"
                     />
-                    <div>
-                      <h3 className="font-semibold text-gray-900 dark:text-white">{intern.name}</h3>
-                      <p className="text-sm text-gray-500 dark:text-slate-400">{intern.email}</p>
+                    <div className="min-w-0">
+                      <h3 className="font-semibold text-gray-900 dark:text-white truncate">{intern.name}</h3>
+                      <p className="text-sm text-gray-500 dark:text-slate-400 truncate">{intern.email}</p>
                       {intern.department && (
                         <span className="inline-block mt-1 px-2 py-0.5 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 text-xs rounded-full">
                           {intern.department}
@@ -103,16 +104,20 @@ export default function InternsPage() {
                       )}
                     </div>
                   </div>
-                  <div className="flex items-center gap-8">
-                    <div className="text-center">
-                      <p className="text-xl font-bold text-blue-600 dark:text-blue-400">{intern._count.activities}</p>
-                      <p className="text-xs text-gray-500 dark:text-slate-400">Aktivitas</p>
+
+                  {/* Stats & Actions */}
+                  <div className="flex flex-wrap items-center gap-4 sm:gap-6 lg:gap-8">
+                    <div className="flex gap-4 sm:gap-6">
+                      <div className="text-center">
+                        <p className="text-lg sm:text-xl font-bold text-blue-600 dark:text-blue-400">{intern._count.activities}</p>
+                        <p className="text-xs text-gray-500 dark:text-slate-400">Aktivitas</p>
+                      </div>
+                      <div className="text-center">
+                        <p className="text-lg sm:text-xl font-bold text-green-600 dark:text-green-400">{intern._count.attendances}</p>
+                        <p className="text-xs text-gray-500 dark:text-slate-400">Kehadiran</p>
+                      </div>
                     </div>
-                    <div className="text-center">
-                      <p className="text-xl font-bold text-green-600 dark:text-green-400">{intern._count.attendances}</p>
-                      <p className="text-xs text-gray-500 dark:text-slate-400">Kehadiran</p>
-                    </div>
-                    <div className="text-right">
+                    <div className="hidden sm:block text-right">
                       {intern.supervisor ? (
                         <p className="text-sm text-gray-600 dark:text-slate-300">
                           Supervisor: <span className="font-medium">{intern.supervisor.name}</span>
@@ -124,7 +129,7 @@ export default function InternsPage() {
                         Bergabung: {formatDate(intern.createdAt)}
                       </p>
                     </div>
-                    <Link href={`/admin/interns/${intern.id}`}>
+                    <Link href={`/admin/interns/${intern.id}`} className="ml-auto lg:ml-0">
                       <Button variant="outline" className="text-sm">
                         Detail
                       </Button>

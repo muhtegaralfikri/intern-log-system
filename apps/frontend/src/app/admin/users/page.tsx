@@ -84,23 +84,21 @@ export default function UsersPage() {
 
   return (
     <div>
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Manage Users</h1>
-        <div className="flex gap-2">
-          <select
-            value={roleFilter}
-            onChange={(e) => {
-              setRoleFilter(e.target.value);
-              setPage(1);
-            }}
-            className="px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-lg text-sm bg-white dark:bg-slate-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
-          >
-            <option value="">Semua Role</option>
-            <option value="INTERN">Intern</option>
-            <option value="SUPERVISOR">Supervisor</option>
-            <option value="ADMIN">Admin</option>
-          </select>
-        </div>
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-6">
+        <h1 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white">Manage Users</h1>
+        <select
+          value={roleFilter}
+          onChange={(e) => {
+            setRoleFilter(e.target.value);
+            setPage(1);
+          }}
+          className="w-full sm:w-auto px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-lg text-sm bg-white dark:bg-slate-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+        >
+          <option value="">Semua Role</option>
+          <option value="INTERN">Intern</option>
+          <option value="SUPERVISOR">Supervisor</option>
+          <option value="ADMIN">Admin</option>
+        </select>
       </div>
 
       {loading ? (
@@ -126,16 +124,17 @@ export default function UsersPage() {
           <div className="space-y-4">
             {users.map((user) => (
               <Card key={user.id}>
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-4">
+                <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+                  {/* Profile Info */}
+                  <div className="flex items-center gap-3 sm:gap-4">
                     <img
                       src={user.avatarUrl || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name)}`}
                       alt={user.name}
-                      className="w-12 h-12 rounded-full object-cover"
+                      className="w-10 h-10 sm:w-12 sm:h-12 rounded-full object-cover flex-shrink-0"
                     />
-                    <div>
-                      <h3 className="font-semibold text-gray-900 dark:text-white">{user.name}</h3>
-                      <p className="text-sm text-gray-500 dark:text-slate-400">{user.email}</p>
+                    <div className="min-w-0">
+                      <h3 className="font-semibold text-gray-900 dark:text-white truncate">{user.name}</h3>
+                      <p className="text-sm text-gray-500 dark:text-slate-400 truncate">{user.email}</p>
                       {user.department && (
                         <span className="inline-block mt-1 text-xs text-gray-600 dark:text-slate-400">
                           {user.department}
@@ -143,8 +142,10 @@ export default function UsersPage() {
                       )}
                     </div>
                   </div>
-                  <div className="flex items-center gap-6">
-                    <div className="grid grid-cols-3 gap-4 text-center">
+
+                  {/* Stats & Role */}
+                  <div className="flex flex-wrap items-center justify-between gap-4 lg:gap-6">
+                    <div className="grid grid-cols-3 gap-3 sm:gap-4 text-center">
                       <div>
                         <p className="font-bold text-blue-600 dark:text-blue-400">{user._count.activities}</p>
                         <p className="text-xs text-gray-500 dark:text-slate-400">Aktivitas</p>
@@ -163,13 +164,13 @@ export default function UsersPage() {
                         value={user.role}
                         onChange={(e) => handleRoleChange(user.id, e.target.value)}
                         disabled={updatingRole === user.id}
-                        className={`px-3 py-1.5 rounded-lg text-sm font-medium ${getRoleColor(user.role)} border-0 focus:outline-none focus:ring-2 focus:ring-blue-500`}
+                        className={`px-2 sm:px-3 py-1.5 rounded-lg text-xs sm:text-sm font-medium ${getRoleColor(user.role)} border-0 focus:outline-none focus:ring-2 focus:ring-blue-500`}
                       >
                         <option value="INTERN">Intern</option>
                         <option value="SUPERVISOR">Supervisor</option>
                         <option value="ADMIN">Admin</option>
                       </select>
-                      <p className="text-xs text-gray-400 dark:text-slate-500 mt-1">
+                      <p className="text-xs text-gray-400 dark:text-slate-500 mt-1 hidden sm:block">
                         {formatDate(user.createdAt)}
                       </p>
                     </div>

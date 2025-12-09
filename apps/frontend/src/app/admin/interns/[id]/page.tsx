@@ -91,22 +91,22 @@ export default function InternDetailPage() {
       </Button>
 
       <Card className="mb-6">
-        <div className="flex items-center gap-6">
+        <div className="flex flex-col sm:flex-row items-center sm:items-start gap-4 sm:gap-6">
           <img
             src={intern.avatarUrl || `https://ui-avatars.com/api/?name=${encodeURIComponent(intern.name)}&size=128`}
             alt={intern.name}
-            className="w-24 h-24 rounded-full object-cover"
+            className="w-20 h-20 sm:w-24 sm:h-24 rounded-full object-cover flex-shrink-0"
           />
-          <div>
-            <h1 className="text-2xl font-bold text-gray-900 dark:text-white">{intern.name}</h1>
-            <p className="text-gray-500 dark:text-slate-400">{intern.email}</p>
-            <div className="flex gap-2 mt-2">
+          <div className="text-center sm:text-left">
+            <h1 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white">{intern.name}</h1>
+            <p className="text-gray-500 dark:text-slate-400 text-sm sm:text-base break-all">{intern.email}</p>
+            <div className="flex flex-wrap justify-center sm:justify-start gap-2 mt-2">
               {intern.department && (
-                <span className="px-2 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 text-sm rounded-full">
+                <span className="px-2 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 text-xs sm:text-sm rounded-full">
                   {intern.department}
                 </span>
               )}
-              <span className="px-2 py-1 bg-gray-100 dark:bg-slate-700 text-gray-700 dark:text-slate-300 text-sm rounded-full">
+              <span className="px-2 py-1 bg-gray-100 dark:bg-slate-700 text-gray-700 dark:text-slate-300 text-xs sm:text-sm rounded-full">
                 {intern.role}
               </span>
             </div>
@@ -195,11 +195,11 @@ export default function InternDetailPage() {
             {intern.recentActivities.map((activity) => (
               <div
                 key={activity.id}
-                className="flex justify-between items-center p-3 bg-gray-50 dark:bg-slate-800 rounded-lg"
+                className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2 p-3 bg-gray-50 dark:bg-slate-800 rounded-lg"
               >
-                <div>
-                  <p className="font-medium text-gray-900 dark:text-white">{activity.title}</p>
-                  <div className="flex gap-2 mt-1">
+                <div className="min-w-0">
+                  <p className="font-medium text-gray-900 dark:text-white truncate">{activity.title}</p>
+                  <div className="flex flex-wrap gap-2 mt-1">
                     <span className="text-xs px-2 py-0.5 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 rounded-full">
                       {activity.category}
                     </span>
@@ -208,7 +208,7 @@ export default function InternDetailPage() {
                     </span>
                   </div>
                 </div>
-                <span className="text-sm text-gray-500 dark:text-slate-400">{formatDate(activity.date)}</span>
+                <span className="text-xs sm:text-sm text-gray-500 dark:text-slate-400 flex-shrink-0">{formatDate(activity.date)}</span>
               </div>
             ))}
           </div>
