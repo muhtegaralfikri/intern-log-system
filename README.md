@@ -129,11 +129,21 @@ Intern/mahasiswa magang seringkali kesulitan dalam mendokumentasikan aktivitas h
 ```
 
 #### 5. Role-Based Access Control
-| Role | Akses |
-|------|-------|
-| Intern | Input log, lihat report sendiri |
-| Supervisor | Pantau intern, approve report |
-| Admin | Manage users, lihat semua data |
+| Role | Panel | Akses |
+|------|-------|-------|
+| **Intern** | `/dashboard` | Input log, lihat report sendiri, absensi |
+| **Supervisor** | `/supervisor` | Pantau intern yang dibimbing, lihat laporan intern sendiri |
+| **Admin** | `/admin` | Full access, manage users, lihat semua data |
+
+##### Perbedaan Admin vs Supervisor:
+| Fitur | Admin | Supervisor |
+|-------|-------|------------|
+| Lihat semua intern | ✅ | ❌ |
+| Lihat intern yang dibimbing | ✅ | ✅ |
+| Manage users & role | ✅ | ❌ |
+| Assign supervisor | ✅ | ❌ |
+| Lihat semua laporan | ✅ | ❌ |
+| Lihat laporan intern sendiri | ✅ | ✅ |
 
 ### Medium Priority
 
@@ -626,8 +636,20 @@ model ReportTemplate {
 |--------|----------|-----------|
 | GET | `/admin/users` | List all users |
 | GET | `/admin/interns` | List all interns |
+| GET | `/admin/interns/:id` | Get intern detail |
 | GET | `/admin/stats` | Dashboard statistics |
 | GET | `/admin/reports` | All reports overview |
+| PATCH | `/admin/users/:id/role` | Update user role |
+| PATCH | `/admin/interns/:id/supervisor` | Assign supervisor |
+
+### Supervisor
+| Method | Endpoint | Deskripsi |
+|--------|----------|-----------|
+| GET | `/supervisor/stats` | Dashboard statistics (intern sendiri) |
+| GET | `/supervisor/interns` | List intern yang dibimbing |
+| GET | `/supervisor/interns/:id` | Get intern detail |
+| GET | `/supervisor/activities/recent` | Recent activities dari intern |
+| GET | `/supervisor/reports` | Reports dari intern yang dibimbing |
 
 ---
 
@@ -689,10 +711,14 @@ intern-log-system/
 │   │   │   │   │   ├── ai.controller.ts
 │   │   │   │   │   ├── ai.service.ts
 │   │   │   │   │   └── ai.module.ts
-│   │   │   │   └── admin/
-│   │   │   │       ├── admin.controller.ts
-│   │   │   │       ├── admin.service.ts
-│   │   │   │       └── admin.module.ts
+│   │   │   │   ├── admin/
+│   │   │   │   │   ├── admin.controller.ts
+│   │   │   │   │   ├── admin.service.ts
+│   │   │   │   │   └── admin.module.ts
+│   │   │   │   └── supervisor/
+│   │   │   │       ├── supervisor.controller.ts
+│   │   │   │       ├── supervisor.service.ts
+│   │   │   │       └── supervisor.module.ts
 │   │   │   ├── prisma/
 │   │   │   │   ├── schema.prisma
 │   │   │   │   ├── migrations/
@@ -757,6 +783,17 @@ intern-log-system/
 │       │   │   │   │   ├── page.tsx
 │       │   │   │   │   └── [id]/
 │       │   │   │   │       └── page.tsx
+│       │   │   │   ├── users/
+│       │   │   │   │   └── page.tsx
+│       │   │   │   └── reports/
+│       │   │   │       └── page.tsx
+│       │   │   ├── supervisor/
+│       │   │   │   ├── layout.tsx
+│       │   │   │   ├── page.tsx
+│       │   │   │   ├── interns/
+│       │   │   │   │   ├── page.tsx
+│       │   │   │   │   └── [id]/
+│       │   │   │   │       └── page.tsx
 │       │   │   │   └── reports/
 │       │   │   │       └── page.tsx
 │       │   │   ├── layout.tsx
@@ -780,6 +817,11 @@ intern-log-system/
 │       │   │   │   └── MoodTrend.tsx
 │       │   │   ├── layout/
 │       │   │   │   ├── Sidebar.tsx
+│       │   │   │   ├── MobileNav.tsx
+│       │   │   │   ├── AdminSidebar.tsx
+│       │   │   │   ├── AdminMobileNav.tsx
+│       │   │   │   ├── SupervisorSidebar.tsx
+│       │   │   │   ├── SupervisorMobileNav.tsx
 │       │   │   │   ├── Header.tsx
 │       │   │   │   └── Footer.tsx
 │       │   │   └── shared/
@@ -850,23 +892,26 @@ cp apps/frontend/.env.example apps/frontend/.env
 # GEMINI_API_KEY="your-gemini-key" (gratis dari https://makersuite.google.com)
 
 # Frontend .env:
-# NEXT_PUBLIC_API_URL="http://localhost:3001"
+# NEXT_PUBLIC_API_URL="http://localhost:5001"
 
 # 5. Start database with Podman
 podman-compose up -d postgres
-# atau: podman run -d --name intern-log-db -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=postgres -e POSTGRES_DB=intern_log -p 5432:5432 postgres:15-alpine
+# atau: podman run -d --name intern-log-db -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=postgres -e POSTGRES_DB=intern_log -p 5433:5432 postgres:15-alpine
 
 # 6. Run database migrations
 cd apps/backend
 npx prisma migrate dev
 npx prisma db seed
 
-# 7. Start development servers
-# Terminal 1 - Backend (port 3001)
+# 7. Start development servers (dari root folder)
+npm run dev
+
+# Atau jalankan terpisah:
+# Terminal 1 - Backend (port 5001)
 cd apps/backend
 npm run start:dev
 
-# Terminal 2 - Frontend (port 3000)
+# Terminal 2 - Frontend (port 5000)
 cd apps/frontend
 npm run dev
 ```
@@ -878,9 +923,10 @@ npm run dev
 podman-compose up --build
 
 # Services:
-# - Frontend: http://localhost:3000
-# - Backend: http://localhost:3001
-# - PostgreSQL: localhost:5432
+# - Frontend: http://localhost:5000
+# - Backend: http://localhost:5001
+# - API Docs: http://localhost:5001/api/docs
+# - PostgreSQL: localhost:5433
 ```
 
 ---
@@ -916,14 +962,14 @@ GEMINI_API_KEY="your-gemini-api-key"
 # OLLAMA_BASE_URL="http://localhost:11434"
 
 # App
-PORT=3001
+PORT=5001
 NODE_ENV=development
 ```
 
 ### Frontend (.env)
 
 ```env
-NEXT_PUBLIC_API_URL=http://localhost:3001
+NEXT_PUBLIC_API_URL=http://localhost:5001
 NEXT_PUBLIC_APP_NAME="Intern Log System"
 ```
 
