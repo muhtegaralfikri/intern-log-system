@@ -31,8 +31,9 @@ export default function LoginPage() {
       // Role-based routing
       if (user.role === 'ADMIN') {
         router.push('/admin');
+      } else if (user.role === 'SUPERVISOR') {
+        router.push('/supervisor');
       } else {
-        // SUPERVISOR and INTERN go to dashboard
         router.push('/dashboard');
       }
     } catch (err: unknown) {

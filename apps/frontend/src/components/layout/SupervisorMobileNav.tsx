@@ -6,14 +6,13 @@ import { usePathname } from 'next/navigation';
 import { useAuthStore } from '@/stores/authStore';
 import { useThemeStore } from '@/stores/themeStore';
 
-const adminMenuItems = [
-  { name: 'Dashboard', href: '/admin', icon: HomeIcon },
-  { name: 'Interns', href: '/admin/interns', icon: UsersIcon },
-  { name: 'Reports', href: '/admin/reports', icon: ChartIcon },
-  { name: 'Users', href: '/admin/users', icon: UserIcon, adminOnly: true },
+const menuItems = [
+  { name: 'Dashboard', href: '/supervisor', icon: HomeIcon },
+  { name: 'Intern Saya', href: '/supervisor/interns', icon: UsersIcon },
+  { name: 'Laporan', href: '/supervisor/reports', icon: ChartIcon },
 ];
 
-export function AdminMobileNav() {
+export function SupervisorMobileNav() {
   const [isOpen, setIsOpen] = useState(false);
   const pathname = usePathname();
   const { user, logout } = useAuthStore();
@@ -27,7 +26,7 @@ export function AdminMobileNav() {
     <>
       {/* Mobile Header */}
       <header className="lg:hidden fixed top-0 left-0 right-0 h-16 bg-white dark:bg-slate-900 border-b border-gray-200 dark:border-slate-700 flex items-center justify-between px-4 z-50 transition-colors">
-        <h1 className="text-lg font-bold text-gray-900 dark:text-white">Admin Panel</h1>
+        <h1 className="text-lg font-bold text-gray-900 dark:text-white">Supervisor</h1>
         <button
           onClick={() => setIsOpen(!isOpen)}
           className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-800 text-gray-700 dark:text-slate-300"
@@ -48,13 +47,9 @@ export function AdminMobileNav() {
       <aside className={`lg:hidden fixed top-16 right-0 h-[calc(100%-4rem)] w-64 bg-white dark:bg-slate-900 border-l border-gray-200 dark:border-slate-700 z-50 transform transition-all flex flex-col ${isOpen ? 'translate-x-0' : 'translate-x-full'}`}>
         <nav className="p-4 flex-1 overflow-y-auto scrollbar-custom">
           <ul className="space-y-1">
-            {adminMenuItems.map((item) => {
-              if (item.adminOnly && user?.role !== 'ADMIN') {
-                return null;
-              }
-
+            {menuItems.map((item) => {
               const isActive = pathname === item.href || 
-                (item.href !== '/admin' && pathname.startsWith(item.href));
+                (item.href !== '/supervisor' && pathname.startsWith(item.href));
               return (
                 <li key={item.href}>
                   <Link
@@ -62,7 +57,7 @@ export function AdminMobileNav() {
                     onClick={() => setIsOpen(false)}
                     className={`flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-colors ${
                       isActive
-                        ? 'bg-green-50 dark:bg-green-900/30 text-green-600 dark:text-green-400'
+                        ? 'bg-purple-50 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400'
                         : 'text-gray-600 dark:text-slate-300 hover:bg-gray-50 dark:hover:bg-slate-800'
                     }`}
                   >
@@ -74,20 +69,17 @@ export function AdminMobileNav() {
             })}
           </ul>
 
-          {/* Divider */}
           <div className="my-4 border-t border-gray-200 dark:border-slate-700"></div>
 
-          {/* Switch to Intern Dashboard */}
           <Link
             href="/dashboard"
             onClick={() => setIsOpen(false)}
             className="flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium text-gray-600 dark:text-slate-300 hover:bg-gray-50 dark:hover:bg-slate-800 transition-colors"
           >
             <SwitchIcon className="w-5 h-5" />
-            Intern Dashboard
+            Dashboard Saya
           </Link>
 
-          {/* Theme Toggle */}
           <div className="mt-4 pt-4 border-t border-gray-200 dark:border-slate-700">
             <button
               onClick={toggleTheme}
@@ -102,9 +94,9 @@ export function AdminMobileNav() {
         {/* User Profile */}
         <div className="p-4 border-t border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900">
           <div className="flex items-center gap-3 mb-3">
-            <div className="w-10 h-10 rounded-full bg-green-100 dark:bg-green-900/50 flex items-center justify-center">
-              <span className="text-green-600 dark:text-green-400 font-semibold">
-                {user?.name?.charAt(0).toUpperCase() || 'A'}
+            <div className="w-10 h-10 rounded-full bg-purple-100 dark:bg-purple-900/50 flex items-center justify-center">
+              <span className="text-purple-600 dark:text-purple-400 font-semibold">
+                {user?.name?.charAt(0).toUpperCase() || 'S'}
               </span>
             </div>
             <div className="flex-1 min-w-0">
@@ -161,14 +153,6 @@ function ChartIcon({ className }: { className?: string }) {
   return (
     <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
       <path strokeLinecap="round" strokeLinejoin="round" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-    </svg>
-  );
-}
-
-function UserIcon({ className }: { className?: string }) {
-  return (
-    <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-      <path strokeLinecap="round" strokeLinejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
     </svg>
   );
 }

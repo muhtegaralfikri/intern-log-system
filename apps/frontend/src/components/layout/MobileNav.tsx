@@ -24,7 +24,8 @@ export function MobileNav() {
   const { user, logout } = useAuthStore();
   const { theme, setTheme } = useThemeStore();
 
-  const isAdmin = user?.role === 'ADMIN' || user?.role === 'SUPERVISOR';
+  const isAdmin = user?.role === 'ADMIN';
+  const isSupervisor = user?.role === 'SUPERVISOR';
 
   const toggleTheme = () => {
     setTheme(theme === 'light' ? 'dark' : 'light');
@@ -93,6 +94,26 @@ export function MobileNav() {
               >
                 <AdminIcon className="w-5 h-5" />
                 Admin Panel
+              </Link>
+            </div>
+          )}
+
+          {isSupervisor && (
+            <div className="mt-4 pt-4 border-t border-gray-200 dark:border-slate-700">
+              <p className="px-4 text-xs font-semibold text-gray-400 dark:text-slate-500 uppercase tracking-wider mb-2">
+                Supervisor
+              </p>
+              <Link
+                href="/supervisor"
+                onClick={() => setIsOpen(false)}
+                className={`flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-colors ${
+                  pathname.startsWith('/supervisor')
+                    ? 'bg-purple-50 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400'
+                    : 'text-gray-600 dark:text-slate-300 hover:bg-gray-50 dark:hover:bg-slate-800'
+                }`}
+              >
+                <SupervisorIcon className="w-5 h-5" />
+                Panel Supervisor
               </Link>
             </div>
           )}
@@ -250,6 +271,14 @@ function MoonIcon({ className }: { className?: string }) {
   return (
     <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
       <path strokeLinecap="round" strokeLinejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+    </svg>
+  );
+}
+
+function SupervisorIcon({ className }: { className?: string }) {
+  return (
+    <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+      <path strokeLinecap="round" strokeLinejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
     </svg>
   );
 }

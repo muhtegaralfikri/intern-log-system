@@ -12,6 +12,7 @@ import { MoodModule } from './modules/mood/mood.module';
 import { FeedbackModule } from './modules/feedback/feedback.module';
 import { AdminModule } from './modules/admin/admin.module';
 import { UsersModule } from './modules/users/users.module';
+import { SupervisorModule } from './modules/supervisor/supervisor.module';
 
 @Module({
   imports: [
@@ -30,6 +31,7 @@ import { UsersModule } from './modules/users/users.module';
     MoodModule,
     FeedbackModule,
     AdminModule,
+    SupervisorModule,
   ],
 })
 export class AppModule {}

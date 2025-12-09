@@ -54,7 +54,7 @@ export function AdminSidebar() {
                   href={item.href}
                   className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${
                     isActive
-                      ? 'bg-blue-50 dark:bg-blue-900/50 text-blue-600 dark:text-blue-400 font-medium'
+                      ? 'bg-green-50 dark:bg-green-900/50 text-green-600 dark:text-green-400 font-medium'
                       : 'text-gray-700 dark:text-slate-300 hover:bg-gray-100 dark:hover:bg-slate-800'
                   }`}
                 >
@@ -91,8 +91,8 @@ export function AdminSidebar() {
       {/* User Profile & Logout */}
       <div className="p-4 border-t border-gray-200 dark:border-slate-700">
         <div className="flex items-center gap-3 mb-3">
-          <div className="w-10 h-10 rounded-full bg-blue-100 dark:bg-blue-900/50 flex items-center justify-center">
-            <span className="text-blue-600 dark:text-blue-400 font-semibold">
+          <div className="w-10 h-10 rounded-full bg-green-100 dark:bg-green-900/50 flex items-center justify-center">
+            <span className="text-green-600 dark:text-green-400 font-semibold">
               {user?.name?.charAt(0).toUpperCase() || 'A'}
             </span>
           </div>

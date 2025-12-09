@@ -119,3 +119,12 @@ export const usersApi = {
     api.patch('/users/me', data),
   getMyInterns: () => api.get('/users/my-interns'),
 };
+
+export const supervisorApi = {
+  getStats: () => api.get('/supervisor/stats'),
+  getMyInterns: () => api.get('/supervisor/interns'),
+  getInternDetail: (id: string) => api.get(`/supervisor/interns/${id}`),
+  getRecentActivities: () => api.get('/supervisor/activities/recent'),
+  getReports: (status?: string) => 
+    api.get(`/supervisor/reports${status ? `?status=${status}` : ''}`),
+};

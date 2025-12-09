@@ -75,7 +75,7 @@ export default function UsersPage() {
 
   const getRoleColor = (role: string) => {
     const colors: Record<string, string> = {
-      ADMIN: 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400',
+      ADMIN: 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400',
       SUPERVISOR: 'bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-400',
       INTERN: 'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400',
     };
